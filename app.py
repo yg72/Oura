@@ -71,14 +71,17 @@ def callback():
 @app.route('/sleep')
 def sleep():
     oauth_token = session['oauth']['access_token']
+    # add 
+    oauth_refresh_token = session['oauth']['refresh_token']
+
     #Add token to the database
-  
     # save_token = user_token(user_id = user_str,access_token = oauth_token)
     user = db.execute(text(f"SELECT * FROM tokens WHERE user_id = '{user_str}'"))
     if not len([item for item in user]):
-        db.execute(text(f"INSERT INTO tokens (user_id, oauth_token) VALUES ('{user_str}', '{oauth_token}')"))
+    # add 
+        db.execute(text(f"INSERT INTO tokens (user_id, oauth_token, oauth_refresh_token) VALUES ('{user_str}', '{oauth_token}', '{oauth_refresh_token}')"))
     else:
-        db.execute(text(f"UPDATE tokens SET oauth_token = '{oauth_token}' WHERE user_id = '{user_str}'"))
+        db.execute(text(f"UPDATE tokens SET (oauth_token, oauth_refresh_token) = ('{oauth_token}','{oauth_refresh_token}')  WHERE user_id = '{user_str}'"))
     db.commit()
     # with open('user_tokens.txt', 'a') as f:
     #     f.write(user_str +': ' + oauth_token + '\n')
