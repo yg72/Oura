@@ -81,7 +81,8 @@ def sleep():
     # add 
         db.execute(text(f"INSERT INTO tokens (user_id, oauth_token, oauth_refresh_token) VALUES ('{user_str}', '{oauth_token}', '{oauth_refresh_token}')"))
     else:
-        db.execute(text(f"UPDATE tokens SET (oauth_token, oauth_refresh_token) = ('{oauth_token}','{oauth_refresh_token}')  WHERE user_id = '{user_str}'"))
+        db.execute(text(f"UPDATE tokens SET oauth_token = '{oauth_token}'  WHERE user_id = '{user_str}'"))
+        db.execute(text(f"UPDATE tokens SET oauth_refresh_token = '{oauth_refresh_token}'  WHERE user_id = '{user_str}'"))
     db.commit()
     # with open('user_tokens.txt', 'a') as f:
     #     f.write(user_str +': ' + oauth_token + '\n')
