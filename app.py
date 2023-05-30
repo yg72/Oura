@@ -13,7 +13,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-engine = create_engine(os.getenv("DATABASE_URL"))
+# engine = create_engine(os.getenv("DATABASE_URL"))
+engine = create_engine("mysql+pymysql://c391tujwolvmij5a:tqkzvprrc96kcm2g@frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/rjb11pca4j89kh0x")
 db = scoped_session(sessionmaker(bind=engine))
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -40,8 +41,8 @@ def oura_login():
 
     """
 
-    if request.method == 'POST':
-       
+    if request.method == 'POST':   
+        print("here")    
         global user_str
         user_str = request.form['fname']
 
@@ -74,7 +75,7 @@ def sleep():
     # add 
     oauth_refresh_token = session['oauth']['refresh_token']
 
-    #Add token to the database
+    # Add token to the database
     save_token = user_token(user_id = user_str,access_token = oauth_access_token, refresh_token = oauth_refresh_token)
     user = db.execute(text(f"SELECT * FROM tokens WHERE user_id = '{user_str}'"))
     if not len([item for item in user]):
@@ -95,4 +96,4 @@ def home():
     return render_template('welcome.html') # "<h1>Welcome to your Oura app</h1>"
 
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port='9090')
+    app.run(debug=True, host='0.0.0.0', port='9090')
