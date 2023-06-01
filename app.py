@@ -33,8 +33,8 @@ OURA_CLIENT_SECRET = os.getenv('OURA_CLIENT_SECRET')
 
 OURA_AUTH_URL = 'https://cloud.ouraring.com/oauth/authorize'
 OURA_TOKEN_URL = 'https://api.ouraring.com/oauth/token'
-OURA_CALLBACK = 'http://ourastudy.herokuapp.com/callback' #"http://119.45.40.139:8027/callback"
-OURA_SLEEP = 'http://ourastudy.herokuapp.com/sleep'
+OURA_CALLBACK = 'https://ourastudy.herokuapp.com/callback' #"http://119.45.40.139:8027/callback"
+OURA_SLEEP = 'https://ourastudy.herokuapp.com/sleep'
 global user_str
 
 
