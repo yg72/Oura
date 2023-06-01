@@ -71,14 +71,14 @@ def callback():
     """
     print("callback")
     # oura_session = OAuth2Session(OURA_CLIENT_ID, state=request.args.get('state'))
-    payload = f"grant_type=authorization_code&code={request.args.get('code')}&client_id={OURA_CLIENT_ID}&client_secret={OURA_CLIENT_SECRET}&redirect_uri={OURA_SLEEP}"
+    payload = f"grant_type=authorization_code&code={request.args.get('code')}&client_id={OURA_CLIENT_ID}&client_secret={OURA_CLIENT_SECRET}&redirect_uri={OURA_CALLBACK}"
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57",
         "content-type": "application/x-www-form-urlencoded"
     }
 
     response = requests.request("POST", OURA_TOKEN_URL, data=payload, headers=headers)
-    return response.text
+    # return response.text
     access_token = response.json()['access_token']
     refresh_token = response.json()['refresh_token']
     oauth = {
