@@ -14,8 +14,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-engine = create_engine("mysql+pymysql://c391tujwolvmij5a:tqkzvprrc96kcm2g@frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/rjb11pca4j89kh0x")
-# engine = create_engine(os.getenv("DATABASE_URL"))
+# engine = create_engine("mysql+pymysql://c391tujwolvmij5a:tqkzvprrc96kcm2g@frwahxxknm9kwy6c.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/rjb11pca4j89kh0x")
+engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -26,10 +26,10 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-OURA_CLIENT_ID ="GDXZT26FQ25TSK7M"
-OURA_CLIENT_SECRET = "TRMFHOI2T3BYRYRP7POC62KUYN37NON4"
-# OURA_CLIENT_ID     = os.getenv('OURA_CLIENT_ID')
-# OURA_CLIENT_SECRET = os.getenv('OURA_CLIENT_SECRET')
+# OURA_CLIENT_ID ="GDXZT26FQ25TSK7M"
+# OURA_CLIENT_SECRET = "TRMFHOI2T3BYRYRP7POC62KUYN37NON4"
+OURA_CLIENT_ID     = os.getenv('OURA_CLIENT_ID')
+OURA_CLIENT_SECRET = os.getenv('OURA_CLIENT_SECRET')
 
 OURA_AUTH_URL = 'https://cloud.ouraring.com/oauth/authorize'
 OURA_TOKEN_URL = 'https://api.ouraring.com/oauth/token'
@@ -49,14 +49,14 @@ def oura_login():
     if request.method == 'POST':
         global user_str
         user_str = request.form['fname']
-    print(OURA_CLIENT_ID)
+    # print(OURA_CLIENT_ID)
 
     oura_session = OAuth2Session(OURA_CLIENT_ID)
     # URL for Oura's authorization page for specific client
     authorization_url, state = oura_session.authorization_url(OURA_AUTH_URL)
-    print("authorization_url",authorization_url)
+    # print("authorization_url",authorization_url)
     session['oauth_state'] = state
-    print("oauth_state",session['oauth_state'])
+    # print("oauth_state",session['oauth_state'])
     newUrl = "{}&redirect_uri={}".format(authorization_url,parse.quote(OURA_CALLBACK))
     
     return redirect(newUrl)
@@ -125,5 +125,5 @@ def oauthToekn():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=False, host='0.0.0.0', port=8080)
 
