@@ -33,8 +33,8 @@ OURA_CLIENT_SECRET = "TRMFHOI2T3BYRYRP7POC62KUYN37NON4"
 
 OURA_AUTH_URL = 'https://cloud.ouraring.com/oauth/authorize'
 OURA_TOKEN_URL = 'https://api.ouraring.com/oauth/token'
-LoCAL_CALLBACK = 'http://ourastudy.herokuapp.com/callback' #"http://119.45.40.139:8027/callback"
-
+OURA_CALLBACK = 'http://ourastudy.herokuapp.com/callback' #"http://119.45.40.139:8027/callback"
+OURA_SLEEP = 'http://ourastudy.herokuapp.com/sleep'
 global user_str
 
 
@@ -49,15 +49,15 @@ def oura_login():
     if request.method == 'POST':
         global user_str
         user_str = request.form['fname']
-    # print(OURA_CLIENT_ID)
+    print(OURA_CLIENT_ID)
 
     oura_session = OAuth2Session(OURA_CLIENT_ID)
     # URL for Oura's authorization page for specific client
     authorization_url, state = oura_session.authorization_url(OURA_AUTH_URL)
-    # print("authorization_url",authorization_url)
+    print("authorization_url",authorization_url)
     session['oauth_state'] = state
-    # print(session['oauth_state'])
-    newUrl = "{}&redirect_uri={}".format(authorization_url,parse.quote(LoCAL_CALLBACK))
+    print("oauth_state",session['oauth_state'])
+    newUrl = "{}&redirect_uri={}".format(authorization_url,parse.quote(OURA_CALLBACK))
     
     return redirect(newUrl)
 # response_type=code&client_id=E55QJ2DGMZUXK6TN&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=email+personal&state=3PgHyjNECEu5YgTQP33NC5tZJ0onm2
@@ -69,9 +69,9 @@ def callback():
     Get the acces_token from response url from Oura. 
     Redirect to the sleep data page.
     """
-    # print("callback")
+    print("callback")
     oura_session = OAuth2Session(OURA_CLIENT_ID, state=request.args.get('state'))
-    payload = f"grant_type=authorization_code&code={request.args.get('code')}&client_id={OURA_CLIENT_ID}&client_secret={OURA_CLIENT_SECRET}&redirect_uri={'http://ourastudy.herokuapp.com/sleep'}"
+    payload = f"grant_type=authorization_code&code={request.args.get('code')}&client_id={OURA_CLIENT_ID}&client_secret={OURA_CLIENT_SECRET}&redirect_uri={OURA_SLEEP}"
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57",
         "content-type": "application/x-www-form-urlencoded"
@@ -97,7 +97,7 @@ def sleep():
     # Add token to the database
     # save_token = user_token(user_id = user_str,access_token = oauth_access_token, refresh_token = oauth_refresh_token)
     user = db.execute(text(f"SELECT * FROM tokens WHERE user_id = '{user_str}'"))
-    # print("user--->",[item for item in user])
+    print("user--->",[item for item in user])
     if len([item for item in user]) == 0:
     # add 
     #     db.execute(text(f"INSERT INTO tokens (user_id, access_token, refresh_token) VALUES ('{user_str}', '{oauth_access_token}', '{oauth_refresh_token}')"))
@@ -125,5 +125,5 @@ def oauthToekn():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=8080)
 
