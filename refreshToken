@@ -1,0 +1,21 @@
+
+
+
+import requests
+
+OURA_CLIENT_ID ="GDXZT26FQ25TSK7M"
+OURA_CLIENT_SECRET = "TRMFHOI2T3BYRYRP7POC62KUYN37NON4"
+
+
+def getNewToken(refreshToken):
+    url = "https://api.ouraring.com/oauth/token"
+    payload = f"grant_type=refresh_token&refresh_token={refreshToken}&client_id={OURA_CLIENT_ID}&client_secret={OURA_CLIENT_SECRET}"
+    headers = {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.57",
+        "content-type": "application/x-www-form-urlencoded"
+    }
+    response = requests.request("POST", url, data=payload, headers=headers)
+    print(response.text)
+
+if __name__ == "__main__":
+    getNewToken()

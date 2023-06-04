@@ -7,7 +7,7 @@ from requests_oauthlib import OAuth2Session
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine, exc
 from sqlalchemy.sql import text
-
+import refreshToken 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -102,7 +102,7 @@ def sleep():
     if len([item for item in user]) == 0:
     # add 
     #     db.execute(text(f"INSERT INTO tokens (user_id, access_token, refresh_token) VALUES ('{user_str}', '{oauth_access_token}', '{oauth_refresh_token}')"))
-        db.execute(text(f"INSERT INTO tokens (user_id, oauth_token) VALUES ('{user_str}', '{oauth_access_token}')"))
+        db.execute(text(f"INSERT INTO tokens (user_id, oauth_token,refresh_token) VALUES ('{user_str}', '{oauth_access_token}', '{oauth_refresh_token}')"))
     else:
         db.execute(text(f"UPDATE tokens SET oauth_token = '{oauth_access_token}'  WHERE user_id = '{user_str}'"))
         # db.execute(text(f"UPDATE tokens SET access_token = '{oauth_access_token}'  WHERE user_id = '{user_str}'"))
